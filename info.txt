@@ -1,0 +1,82 @@
+Trinket M0
+    -ATSAMD21E18A 32-bit Cortex M0+
+    -256KB Flash [0x 0000 0000]
+    -32 KB RAM   [0x 2000 0000]
+    -48 MHz 32 bit Processor
+    -D0     :      PA08
+    -D1     :      PA02
+    -D2     :      PA09
+    -D3     :      PA07
+    -D4     :      PA06
+    -Pin13  :      PA10     :       onBoardGreenLED
+
+
+    
+Notes:
+ 
+~MCU Boot and Vector Table
+    -On Boot, the vector table from the beginning of Flash
+     memory is read. 
+    -Vector Table is an array of 32 bt addresses of 
+     Interrupt Handlers, except for the first 2 entries
+    -The first 2 values are: initial stack pointer, address of boot function
+     
+~Minimal Firmware
+    -main.c:
+    		
+    	// Startup Code
+    	__attribute__((naked, noreturn)) void _reset(void){
+            for (;;) (void) 0; // Infinite loop
+    	}
+    	
+    	1. GCC-specific attributes  'naked': standard function's prologue and
+    					                     epilogue should not be created by 
+    					                     compiler
+                                    'noreturn': no return 
+    				 
+    	extern void _estack(void); // Defined in link.ld
+    	
+    	// 28 Handlers
+    	__attribute__((section(".vectors"))) void (*const tab[28])(void) = {
+    	    _estack, _reset
+        };
+
+        2. We are defining an array of 16+x pointers to functions which return void 
+           and take no arguments(void)
+           Each such function is an IRQ handler (Interrupt ReQuest)
+           An array of those handlers is called vector Table (i cant find vector table)
+
+        3. arm-none-eabi-gcc -mcpu-cortex-m0plus main.c -c
+           -> produce main.o which is ELF binray format 
+
+           Note that without Linker script (bshsamd32e18.ld),
+           VMA/LMA addresses are set to 0 (Virtual Mem Addr, Load Mem Addr)
+           It does not contain information of where sections should be loaded 
+           in the address space
+
+           Section .text contains firmware code 
+           _reset() function should copy the contents of the .data section to RAM
+           _reset() function also should write zeroes to the whole .bss section
+
+~Makefile
+    -CFLAGS -fno-common:    specifies that the compiler places uninitialized global
+                            variables in the BSS section of the object file
+            -Os[X]:         Optimize for size, enable all -O2 optimizations except 
+                            those increase code size
+            -O0:            No optimization, faster compilation time
+            -g:             Build executable with debuggin symbols for GDB GNU    
+            -Wall:          Turns on lots of compiler warning flags
+            -W, or Wextra:  Enables extra flags no enabled by -Wall 
+            -Werror:        Turn any warning into a compilation error   
+            -ffunction-section, -fdata-sections:
+                            Eliminate dead/unused code for decreasing the program
+                            or firmware size
+            -I/path/to/include1 -I/path/to/include2:
+                            Include path - Directories containing header files
+
+   -LDFLAGS -T
+            -nostartfiles:  "Do not use the standard system startup files when 
+                            linking. The standard system libraries are used normally,
+                            unless -nostdlib, -nolibc, -nodefaultlibs is used
+            -nostdlib:      Do not use the syandard system startup files or 
+                            libraries when linking
