@@ -1,0 +1,25 @@
+OPENOCD NOTES:
+
+References:
+
+	ckuethe/openocd-trinket.cfg (githib)
+
+	https://learn.adafruit.com/debugging-the-samd21-with-gdb/setup
+
+
+usr/share/openocd/scripts/target/at91samdXX.cfg
+
+# SAMD runs at SYSCLK = 1 MHz divided from RC oscillator after reset.
+# Other members of family usually use SYSCLK = 4 MHz after reset.
+# Datasheet does not specify SYSCLK to SWD clock ratio.
+# Usually used SYSCLK/6 is slow, testing shows that debugging can
+# work @ SYSCLK/2 but your mileage may vary.
+# This limit is most probably imposed by incorrectly handled SWD WAIT
+# on some SWD adapters.
+
+adapter speed 400
+
+
+Commands
+openocd -f pathtoInterface -f pathtoTarget
+or use openocd.cfg under scripts folder

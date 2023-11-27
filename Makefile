@@ -1,10 +1,10 @@
 PORT=/dev/ttyACM0
 
-CFLAGS	?=	-Wall -W -Werror \
+CFLAGS	?=	-Wall -W \
 			-g -fno-common -Os -ffunction-sections -fdata-sections -I. \
 			-DF_CPU=48000000UL -mcpu=cortex-m0plus -mthumb
-LDFLAGS ?=	-Tbshsamd21e18.ld -nostartfiles -W
-SOURCES = main.c startup.c
+LDFLAGS ?=	-T bshsamd21e18.ld -nostartfiles -W 
+SOURCES = example.c startup.c
 
 build:	firmware.bin
 

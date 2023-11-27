@@ -20,17 +20,17 @@
 
 volatile unsigned int time;
 
-int main(void) {
+void main(void) {
     //configure PA08 and PA02, set as OUTPUT
-    REG_PORT_DIRSET = (1 << PIN_D0) | (1 << PIN_D1);
+    REG_PORT_DIRSET |= (1 << PIN_D0) | (1 << PIN_D1);
     while(1){
         for( time = 0; time < 5000; time++);
-        REG_PORT_OUTSET = (1 << PIN_D0) | (1 << PIN_D1);
+        REG_PORT_OUTSET |= (1 << PIN_D0) | (1 << PIN_D1);
         for( time = 0; time < 5000; time++);
-        REG_PORT_OUTCLR = (1 << PIN_D0) | (1 << PIN_D1);
+        REG_PORT_OUTCLR |= (1 << PIN_D0) | (1 << PIN_D1);
 
     }
 
 
-    return 0;
+    
 }

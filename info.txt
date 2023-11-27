@@ -80,3 +80,34 @@ Notes:
                             unless -nostdlib, -nolibc, -nodefaultlibs is used
             -nostdlib:      Do not use the syandard system startup files or 
                             libraries when linking
+
+-JLinkExe 
+	InitTarget() end - Took 2.20ms
+	Found SW-DP with ID 0x0BC11477
+	DPIDR: 0x0BC11477
+	CoreSight SoC-400 or earlier
+	Scanning AP map to find all available APs
+	AP[1]: Stopped AP scan as end of AP map has been reached
+	AP[0]: AHB-AP (IDR: 0x04770031)
+	Iterating through AP map to find AHB-AP to use
+	AP[0]: Core found
+	AP[0]: AHB-AP ROM base: 0x41003000
+	CPUID register: 0x410CC601. Implementer code: 0x41 (ARM)
+	Found Cortex-M0 r0p1, Little endian.
+	FPUnit: 4 code (BP) slots and 0 literal slots
+	CoreSight components:
+	ROMTbl[0] @ 41003000
+	[0][0]: E00FF000 CID B105100D PID 000BB4C0 ROM Table
+	ROMTbl[1] @ E00FF000
+	[1][0]: E000E000 CID B105E00D PID 000BB008 SCS
+	[1][1]: E0001000 CID B105E00D PID 000BB00A DWT
+	[1][2]: E0002000 CID B105E00D PID 000BB00B FPB
+	[0][1]: 41006000 CID B105900D PID 001BB932 MTB-M0+
+	Memory zones:
+	  Zone: "Default" Description: Default access mode
+	Cortex-M0 identified.
+
+	J-Link>unlock Kinetis
+	Found SWD-DP with ID 0x0BC11477
+	Unlocking device...Timeout while unlocking device.
+	
